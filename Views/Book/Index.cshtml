@@ -1,0 +1,80 @@
+@model IList<PgBookStore.Models.BookViewModel>
+<div class="">
+    <div class="page-title">
+        <div class="title_left">
+            <h3>Book</h3>
+        </div>
+        <div class="title_right">
+            <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for..."/>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Go !</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>List of Books</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a asp-controller="Book" asp-action="Create"><i class="fa fa-plus"></i> Add Data</a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div class="x_content">
+                    <div class="table-responsive">
+                        <table class="table table-stripped jambo_table bulk_action">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="flat"/>
+                                    </th>
+                                    <th class="column-title">@Html.DisplayNameFor(model => Model.FirstOrDefault().ISBN)</th>
+                                    <th class="column-title">@Html.DisplayNameFor(model => Model.FirstOrDefault().Photo)</th>
+                                    <th class="column-title">@Html.DisplayNameFor(model => Model.FirstOrDefault().CategoryName)</th>
+                                    <th class="column-title">@Html.DisplayNameFor(model => Model.FirstOrDefault().Title)</th>
+                                    <th class="column-title">@Html.DisplayNameFor(model => Model.FirstOrDefault().PublishDate)</th>
+                                    <th class="column-title">@Html.DisplayNameFor(model => Model.FirstOrDefault().Quantity)</th>
+                                    <th class="column-title no-link last"><span class="nobr">Action</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var odd = false; }
+                                @foreach (var item in Model)
+                                {
+                                    <tr class="@(odd ? "odd" : "even") pointer">
+                                        <td class="a-center"><input type="checkbox" class="flat" name="table_records"/></td>
+                                        <td>@item.ISBN</td>
+                                        <td><img src="~/upload/@item.Photo" asp-append-version="true" style="width: 100px; height: 142px"/></td>
+                                        <td>@item.CategoryName</td>
+                                        <td>
+                                            @item.Title <br/>
+                                            ISBN : @item.ISBN <br/>
+                                            Authors : @item.AuthorNames <br/>
+                                            Price : @item.Price
+                                        </td>
+                                        <td>@item.PublishDate</td>
+                                        <td>@item.Quantity</td>
+                                        <td class="last">
+                                            <a asp-controller="Book" asp-action="Edit" asp-route-id="@item.ISBN" class="btn btn-warning">Edit</a> 
+                                            <a asp-controller="Book" asp-action="Delete" asp-route-id="@item.ISBN" class="btn btn-danger">Delete</a>
+                                        </td>
+                                    </tr>
+                                    odd = !odd;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

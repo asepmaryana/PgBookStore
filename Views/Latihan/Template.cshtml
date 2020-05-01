@@ -1,0 +1,13 @@
+@{
+    Layout = "MasterLayout";
+}
+@model PgBookStore.Models.ContohModel
+
+<h1>Contoh Attribute Model</h1>
+<form asp-controller="Latihan" asp-action="Attribut">
+    <label asp-for="ContohText" class="control-label"></label>
+    <select asp-for="ContohText" asp-items="@(new SelectList(ViewBag.Authors, "AuthorID","Name"))" class="form-control">
+        <option>Choose Authors</option>
+    </select>
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
