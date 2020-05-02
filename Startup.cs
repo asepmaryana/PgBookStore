@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using PgBookStore.Data;
@@ -12,6 +14,8 @@ namespace PgBookStore
 {
     public class Startup
     {
+        public const string CookieScheme = "PgBookStore";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,8 +27,7 @@ namespace PgBookStore
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>(options => {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password.RequireDigit = false;
@@ -36,7 +39,13 @@ namespace PgBookStore
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();            
             services.AddControllersWithViews();
-           services.AddRazorPages();
+            services.AddRazorPages();
+            services.ConfigureApplicationCookie(option =>
+            {
+                option.LoginPath = "/Home/Login";
+                option.LogoutPath = "/Home/Logout";
+                option.AccessDeniedPath = "/Home/AccessDenied";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +74,7 @@ namespace PgBookStore
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Latihan}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
